@@ -1,0 +1,104 @@
+<!DOCTYPE html> 
+<html> 
+	<head>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" /> 
+		<style type="text/css"> 
+			html { height: 100% } 
+			body { height: 100%; margin: 0px; padding: 0px } 
+			#map_canvas { height: 100% } 
+		</style> 
+
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"> 
+		</script>
+
+		<script type="text/javascript">
+			///////////////////////////////////////////////////////////////////
+			///
+			/// The base path of the map tiles.
+			///
+			/// You need to update this value in order for this web page to
+			/// work!
+			///
+			///////////////////////////////////////////////////////////////////
+			var basePath = "$(BasePath)";
+		
+			function TerrariaMapType() { 
+			} 
+ 
+			TerrariaMapType.prototype.tileSize = new google.maps.Size(256,256); 
+			TerrariaMapType.prototype.name = "Terraria"; 
+			TerrariaMapType.prototype.minZoom = 1; 
+			TerrariaMapType.prototype.maxZoom = 6; 
+ 
+			TerrariaMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
+				var zoomLevel;
+
+				switch (zoom) {
+					case 1:
+						zoomLevel = 0.03125;
+						break;
+
+					case 2:
+						zoomLevel = 0.0625;
+						break;
+
+					case 3:
+						zoomLevel = 0.125;
+						break;
+
+					case 4:
+						zoomLevel = 0.25;
+						break;
+
+					case 5:
+						zoomLevel = 0.5;
+						break;
+
+					case 6:
+						zoomLevel = 1;
+						break;
+
+					case 7:
+						zoomLevel = 2;
+						break;
+				}
+
+				var div = ownerDocument.createElement('DIV'); 
+				div.style.background = "black url(" + basePath + "Zoom%20" + zoomLevel.toString() + "/Layer%200/" + coord.x.toString() + "/" + coord.y.toString() + ".png)";
+
+				//div.innerHTML = coord + "," + zoomLevel.toString() + "<br/><br/>Zoom " + zoomLevel.toString() + "/Layer 0/" + coord.x.toString() + "/" + coord.y.toString() + ".png)";
+				div.style.color = "white";
+				div.style.width = this.tileSize.width + 'px'; 
+				div.style.height = this.tileSize.height + 'px'; 
+				div.style.fontSize = '10';   
+				//div.style.border = "1px solid gray";
+				return div; 
+			}; 
+ 
+			TerrariaMapType.prototype.name = "Terraria"; 
+			TerrariaMapType.prototype.alt = "Tile Coordinate Map Type"; 
+ 
+			var map;
+			var chicago = new google.maps.LatLng(80,-170);
+			var terrariaMapType = new TerrariaMapType();
+ 
+			function initialize() {
+				var mapOptions = { 
+					zoom: 6, 
+					center: chicago, 
+					mapTypeControlOptions: { 
+						mapTypeIds: ['Terraria'], 
+						style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR 
+					} 
+				}; 
+
+				map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions); 
+				map.mapTypes.set('terraria', terrariaMapType); 
+				map.setMapTypeId('terraria'); 
+			}
+		</script> 
+	</head> 
+	<body onload="initialize()"> 
+		<div id="map_canvas" style="width:100%; height:100%"></div> 
+	</body>
+</html>
