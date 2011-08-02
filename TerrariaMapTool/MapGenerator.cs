@@ -892,6 +892,8 @@ namespace TerrariaMapTool {
                 writer.WriteAttributeString("Size", string.Format("{0},{1}", world.Size.Width, world.Size.Height));
                 writer.WriteAttributeString("Bounds", string.Format("{0},{1},{2},{3}", world.leftWorld, world.topWorld, world.rightWorld, world.bottomWorld));
                 writer.WriteAttributeString("Spawn", string.Format("{0},{1}", world.Spawn.X, world.Spawn.Y));
+                writer.WriteAttributeString("Spawn_X", string.Format("{0}", world.Spawn.X));
+                writer.WriteAttributeString("Spawn_Y", string.Format("{0}", world.Spawn.Y));
 
                 writer.WriteStartElement("Npcs");
 
@@ -903,6 +905,8 @@ namespace TerrariaMapTool {
                     writer.WriteStartElement("Npc");
                     writer.WriteAttributeString("Name", npc.Name);
                     writer.WriteAttributeString("Location", string.Format("{0},{1}", npc.Position.X, npc.Position.Y));
+                    writer.WriteAttributeString("Location_X", npc.Position.X.ToString());
+                    writer.WriteAttributeString("Location_Y", npc.Position.Y.ToString());
                     writer.WriteAttributeString("Home", string.Format("{0},{1}", npc.HomePosition.X, npc.HomePosition.Y));
                     writer.WriteAttributeString("Homeless", npc.IsHomeless.ToString());
                     writer.WriteEndElement();
@@ -919,7 +923,8 @@ namespace TerrariaMapTool {
 
                     writer.WriteStartElement("Chest");
                     writer.WriteAttributeString("Location", string.Format("{0},{1}", chest.Position.X, chest.Position.Y));
-
+                    writer.WriteAttributeString("Location_X", chest.Position.X.ToString());
+                    writer.WriteAttributeString("Location_Y", chest.Position.Y.ToString());
                     foreach (Item item in chest.Items) {
                         if (item == null) {
                             continue;
@@ -951,6 +956,8 @@ namespace TerrariaMapTool {
 
                     writer.WriteStartElement("Sign");
                     writer.WriteAttributeString("Location", string.Format("{0},{1}", sign.Position.X, sign.Position.Y));
+                    writer.WriteAttributeString("Location_X", sign.Position.X.ToString());
+                    writer.WriteAttributeString("Location_Y", sign.Position.Y.ToString());
                     writer.WriteCData(sign.Text);
                     writer.WriteEndElement();
                 }
@@ -968,6 +975,8 @@ namespace TerrariaMapTool {
                     foreach (System.Drawing.Point location in entry.Value) {
                         writer.WriteStartElement(entry.Key.ToString());
                         writer.WriteAttributeString("Location", string.Format("{0},{1}", location.X, location.Y));
+                        writer.WriteAttributeString("Location_X", location.X.ToString());
+                        writer.WriteAttributeString("Location_Y", location.Y.ToString());
                         writer.WriteEndElement();
                     }
 
@@ -1042,10 +1051,8 @@ namespace TerrariaMapTool {
                             if (progressHandler.Cancel) {
                                 return;
                             }
-
                             progressHandler.WriteLine(string.Format("  Writing Block {0},{1}", i, j));
                             CreateBlockImages(world, i, j, blockWidth, blockHeight, zoomLevel);
-
                             ++progressHandler.SubTasksCompleted;
                         }
                     });
