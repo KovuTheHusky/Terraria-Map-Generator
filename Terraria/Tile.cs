@@ -21,7 +21,12 @@ namespace Terraria {
         public byte WallFrameNumber;
         public byte WallFrameX;
         public byte WallFrameY;
+        public bool Wire;
 
         #endregion
+
+        public Tile Clone() {
+            return (Tile)this.MemberwiseClone();
+        }
     }
 }

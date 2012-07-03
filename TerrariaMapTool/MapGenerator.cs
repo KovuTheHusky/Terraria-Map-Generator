@@ -106,7 +106,7 @@ namespace TerrariaMapTool {
                 }
             }
 
-            for (int i = 1; i < 14; i++) {
+            for (int i = 1; i < 32; i++) {
                 textures.wallTexture[i] = ConvertTextureToImage(content.Load<Texture2D>(@"Images\Wall_" + i));
 
                 if (exportTexturesToFiles) {
@@ -114,7 +114,7 @@ namespace TerrariaMapTool {
                 }
             }
 
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 32; i++) {
                 textures.backgroundTexture[i] = ConvertTextureToImage(content.Load<Texture2D>(@"Images\Background_" + i));
 
                 if (exportTexturesToFiles) {
@@ -122,7 +122,7 @@ namespace TerrariaMapTool {
                 }
             }
 
-            for (int i = 0; i < 44; i++) {
+            for (int i = 0; i < 147; i++) {
                 textures.npcTexture[i] = ConvertTextureToImage(content.Load<Texture2D>(@"Images\NPC_" + i));
 
                 if (exportTexturesToFiles) {
@@ -146,7 +146,7 @@ namespace TerrariaMapTool {
                 }
             }
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 5; i++) {
                 textures.treeTopTexture[i] = ConvertTextureToImage(content.Load<Texture2D>(@"Images\Tree_Tops_" + i));
 
                 if (exportTexturesToFiles) {
@@ -154,7 +154,7 @@ namespace TerrariaMapTool {
                 }
             }
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 5; i++) {
                 textures.treeBranchTexture[i] = ConvertTextureToImage(content.Load<Texture2D>(@"Images\Tree_Branches_" + i));
 
                 if (exportTexturesToFiles) {
@@ -1074,14 +1074,14 @@ namespace TerrariaMapTool {
 
             private object copyLock = new object();
 
-            public Image[] backgroundTexture = new Image[7];
+            public Image[] backgroundTexture = new Image[32];
             public Image[] cloudTexture = new Image[4];
             public Image[] liquidTexture = new Image[2];
             public Image[] tileTexture = new Image[World.NumTiles];
-            public Image[] wallTexture = new Image[14];
-            public Image[] npcTexture = new Image[44];
-            public Image[] treeBranchTexture = new Image[3];
-            public Image[] treeTopTexture = new Image[3];
+            public Image[] wallTexture = new Image[32];
+            public Image[] npcTexture = new Image[147];
+            public Image[] treeBranchTexture = new Image[5];
+            public Image[] treeTopTexture = new Image[5];
             public Image sunTexture;
             public Image moonTexture;
             public Image shroomCapTexture;
