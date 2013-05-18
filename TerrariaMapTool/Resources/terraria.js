@@ -92,7 +92,8 @@
 					mapTypeControlOptions: { 
 						mapTypeIds: ['Terraria'], 
 						style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR 
-					} 
+					},
+                    streetViewControl: false
 				}; 
 
 				map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions); 
