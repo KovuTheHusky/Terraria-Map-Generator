@@ -27,9 +27,9 @@
 			/// work!
 			///
 			///////////////////////////////////////////////////////////////////
-			var basePath = "http://localhost:8080/";
+			var basePath = "/";
 			var inited = false;
-			var origin = new google.maps.LatLng(0, 0);
+			var origin = translateGameXYToLatLng(0, 600);
 			var infoWindows = new Array();
 			var infoWindow;
 			function TerrariaMapType() { 
@@ -38,7 +38,7 @@
 			TerrariaMapType.prototype.tileSize = new google.maps.Size(256,256); 
 			TerrariaMapType.prototype.name = "Terraria"; 
 			TerrariaMapType.prototype.minZoom = 11; 
-			TerrariaMapType.prototype.maxZoom = 16; 
+			TerrariaMapType.prototype.maxZoom = 17; 
  
 			TerrariaMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
 				var zoomLevel;

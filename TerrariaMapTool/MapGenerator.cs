@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -44,7 +44,7 @@ namespace TerrariaMapTool {
         }
 
         #endregion
-
+        
         #region Members
 
         private Image ConvertTextureToImage(Texture2D texture) {
@@ -991,7 +991,7 @@ namespace TerrariaMapTool {
             }
         }
 
-        private void WriteMapHtml() {
+        private void WriteMapHtml(World world) {
             string mapHtmlPath = Path.Combine(options.OutputDirectory, "Map.html");
 
             string basePath = "file:///" + options.OutputDirectory.Replace("\\", "/").Replace(" ", "%20");
@@ -1001,6 +1001,12 @@ namespace TerrariaMapTool {
             }
 
             File.WriteAllText(mapHtmlPath, Properties.Resources.Map.Replace("$(BasePath)", basePath));
+
+            string terrariaJsPath = Path.Combine(options.OutputDirectory, "terraria.js");
+            string utilJsPath = Path.Combine(options.OutputDirectory, "util.js");
+
+            File.WriteAllText(terrariaJsPath, Properties.Resources.Terraria.Replace("var origin = translateGameXYToLatLng(0, 600);", "var origin = translateGameXYToLatLng(" + world.Spawn.X + ", 600);"));
+            File.WriteAllText(utilJsPath, Properties.Resources.Utilities);
         }
 
         public void Generate(MapGeneratorProgressHandler progressHandler) {
@@ -1064,7 +1070,7 @@ namespace TerrariaMapTool {
                 ++progressHandler.TasksCompleted;
             }
 
-            WriteMapHtml();
+            WriteMapHtml(world);
 
             progressHandler.WriteLine("Done");
         }

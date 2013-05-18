@@ -149,6 +149,8 @@
     <None Include="Resources\Map.html" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\terraria.js" />
+    <None Include="Resources\util.js" />
     <Content Include="TerrariaMapTool.ico" />
   </ItemGroup>
   <ItemGroup>
