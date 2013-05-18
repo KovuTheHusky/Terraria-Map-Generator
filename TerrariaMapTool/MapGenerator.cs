@@ -224,7 +224,7 @@ namespace TerrariaMapTool {
 
             // Draw the Dirt Sky Blend
             if (region.Top < skyEnd && skyEnd <= region.Bottom) {
-                float destinationTop = (skyEnd - region.Top - 1) * 16;
+                float destinationTop = (skyEnd - region.Top - 1) * 16; // might need to +/- 8
 
                 // How many across need to be rendered.
                 int instances = (int) Math.Ceiling(regionWidth / textures.backgroundTexture[1].Width) + 1;
@@ -251,7 +251,7 @@ namespace TerrariaMapTool {
 
                 int blockCount = maxBlockY - minBlockY;
 
-                int dirtBackgroundTextureWidth = textures.backgroundTexture[2].Width;
+                int dirtBackgroundTextureWidth = textures.backgroundTexture[2].Width - 32;
                 int dirtBackgroundTextureHeight = textures.backgroundTexture[2].Height;
 
                 // How many vertical repeats.
@@ -269,14 +269,16 @@ namespace TerrariaMapTool {
 
             // Draw the Dirt Rock Blend
             if (region.Top < rockStart && rockStart <= region.Bottom) {
-                float destinationTop = (rockStart - region.Top - 1) * 16;
+                float destinationTop = (rockStart - region.Top) * 16 - 8;
+
+                int dirRockBeackgroundTextureWidth = textures.backgroundTexture[4].Width - 32;
 
                 // How many across need to be rendered.
-                int instances = (int) Math.Ceiling(regionWidth / textures.backgroundTexture[4].Width) + 1;
+                int instances = (int) Math.Ceiling(regionWidth / dirRockBeackgroundTextureWidth) + 1;
                 int offset = ((region.Left % 6) + 3) * 16;
 
                 for (int i = 0; i < instances; ++i) {
-                    g.DrawImage(textures.backgroundTexture[4], new PointF(i * textures.backgroundTexture[4].Width - offset, destinationTop));
+                    g.DrawImage(textures.backgroundTexture[4], new PointF(i * dirRockBeackgroundTextureWidth - offset, destinationTop));
                 }
             }
 
@@ -296,7 +298,7 @@ namespace TerrariaMapTool {
 
                 int blockCount = maxBlockY - minBlockY;
 
-                int rockBackgroundTextureWidth = textures.backgroundTexture[3].Width;
+                int rockBackgroundTextureWidth = textures.backgroundTexture[3].Width - 32;
                 int rockBackgroundTextureHeight = textures.backgroundTexture[3].Height;
 
                 // How many vertical repeats.
@@ -314,14 +316,16 @@ namespace TerrariaMapTool {
 
             // Draw the Rock Hell Blend
             if (region.Top < hellStart && hellStart <= region.Bottom) {
-                float destinationTop = (hellStart - region.Top - 1) * 16 + 24;
+                float destinationTop = (hellStart - region.Top) * 16 + 24 - 8;
+
+                int rockHellBackgroundTextureWidth = textures.backgroundTexture[6].Width - 32;
 
                 // How many across need to be rendered.
-                int instances = (int) Math.Ceiling(regionWidth / textures.backgroundTexture[6].Width) + 1;
+                int instances = (int) Math.Ceiling(regionWidth / rockHellBackgroundTextureWidth) + 1;
                 int offset = ((region.Left % 6) + 3) * 16;
 
                 for (int i = 0; i < instances; ++i) {
-                    g.DrawImage(textures.backgroundTexture[6], new PointF(i * textures.backgroundTexture[6].Width - offset, destinationTop));
+                    g.DrawImage(textures.backgroundTexture[6], new PointF(i * rockHellBackgroundTextureWidth - offset, destinationTop));
                 }
             }
 
@@ -339,7 +343,7 @@ namespace TerrariaMapTool {
 
                 int blockCount = maxBlockY - minBlockY;
 
-                int rockBackgroundTextureWidth = textures.backgroundTexture[5].Width;
+                int rockBackgroundTextureWidth = textures.backgroundTexture[5].Width - 32;
                 int rockBackgroundTextureHeight = textures.backgroundTexture[5].Height;
 
                 // How many vertical repeats.
@@ -935,7 +939,7 @@ namespace TerrariaMapTool {
                         if (!IsNameValid(item.Name)) {
                             writer.WriteAttributeString("Name", "Invalid");
                         } else {
-                            writer.WriteAttributeString("Name", item.Name);
+                            writer.WriteAttributeString("Name", World.itemNames[Int32.Parse(item.Name)]);
                         }
 
                         writer.WriteAttributeString("Count", item.Count.ToString());
