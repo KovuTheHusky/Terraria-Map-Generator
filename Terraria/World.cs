@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -13,7 +13,7 @@ namespace Terraria {
         public static int MaxTilesY = ((((int)MaxBottomWorld) / 16) + 1);
         public static Random genRand = new Random();
         public static int CurrentRelease = 2;
-        public static int NumTiles = 150;
+        public static int NumTiles = 255;
         public static bool[] tileSolid = new bool[NumTiles];
         public static bool[] tileFrameImportant = new bool[NumTiles];
         public static bool[] tileStone = new bool[NumTiles];
@@ -39,6 +39,15 @@ namespace Terraria {
         public float topWorld = 0f;
         public float bottomWorld = 0f;
 
+        public byte moonType;
+        public int[] treeX = new int[3];
+        public int[] treeStyles = new int[4];
+        public int[] caveX = new int[3];
+        public int[] caveBackStyles = new int[4];
+        public int iceBackStyle;
+        public int jungleBackStyle;
+        public int hellBackStyle;
+
         public Size Size;
         public Point Spawn;
         public Point Dungeon;
@@ -46,9 +55,19 @@ namespace Terraria {
         public double worldSurface;
         public double rockLayer;
 
+        public bool crimsonWorld;
+
         public bool downedBoss1;
         public bool downedBoss2;
         public bool downedBoss3;
+
+        public bool downedBee;
+        public bool downedDestroyer;
+        public bool downedTwins;
+        public bool downedPrime;
+        public bool downedHardmodeBoss;
+        public bool downedPlantera;
+        public bool downedGolem;
 
         public bool savedGoblinTinkerer;
         public bool savedWizard;
@@ -56,6 +75,8 @@ namespace Terraria {
         public bool defeatedGoblinInvasion;
         public bool killedClown;
         public bool defeatedFrostLegion;
+
+        public bool defeatedPirates;
 
         public bool shadowOrbSmashed;
         public bool spawnMeteor;
@@ -69,6 +90,27 @@ namespace Terraria {
         public int invasionType = 0;
         public int invasionWarn = 0;
         public double invasionX;
+
+        public bool isRaining;
+        public int rainTime;
+        public float maxRain;
+
+        public int tier1;
+        public int tier2;
+        public int tier3;
+
+        public byte treeStyle;
+        public byte corruptionStyle;
+        public byte jungleStyle;
+        public byte snowStyle;
+        public byte hallowStyle;
+        public byte crimsonStyle;
+        public byte desertStyle;
+        public byte oceanStyle;
+
+        public int cloudBackground;
+        public short numberOfClouds;
+        public float windSpeed;
 
         public Chest[] chest = new Chest[1000];
         public Sign[] sign = new Sign[Sign.MaxSigns];
@@ -267,6 +309,9 @@ namespace Terraria {
             tileNoAttach[0x1b] = true;
 
             tileFrameImportant[3] = true;
+
+            tileFrameImportant[4] = true;
+
             tileFrameImportant[5] = true;
             tileFrameImportant[10] = true;
             tileFrameImportant[11] = true;
@@ -277,6 +322,9 @@ namespace Terraria {
             tileFrameImportant[16] = true;
             tileFrameImportant[17] = true;
             tileFrameImportant[18] = true;
+
+            tileFrameImportant[19] = true;
+
             tileFrameImportant[20] = true;
             tileFrameImportant[21] = true;
             tileFrameImportant[24] = true;
@@ -347,6 +395,47 @@ namespace Terraria {
             tileFrameImportant[143] = true;
             tileFrameImportant[144] = true;
             tileFrameImportant[149] = true;
+
+            tileFrameImportant[165] = true;
+            tileFrameImportant[170] = true;
+            tileFrameImportant[171] = true;
+            tileFrameImportant[172] = true;
+            tileFrameImportant[173] = true;
+            tileFrameImportant[174] = true;
+            tileFrameImportant[178] = true;
+            tileFrameImportant[184] = true;
+            tileFrameImportant[185] = true;
+            tileFrameImportant[186] = true;
+            tileFrameImportant[187] = true;
+            tileFrameImportant[201] = true;
+            tileFrameImportant[207] = true;
+            tileFrameImportant[209] = true;
+            tileFrameImportant[210] = true;
+            tileFrameImportant[212] = true;
+            tileFrameImportant[215] = true;
+            tileFrameImportant[216] = true;
+            tileFrameImportant[217] = true;
+            tileFrameImportant[218] = true;
+            tileFrameImportant[219] = true;
+            tileFrameImportant[220] = true;
+            tileFrameImportant[227] = true;
+            tileFrameImportant[228] = true;
+            tileFrameImportant[231] = true;
+            tileFrameImportant[233] = true;
+            tileFrameImportant[235] = true;
+            tileFrameImportant[236] = true;
+            tileFrameImportant[237] = true;
+            tileFrameImportant[238] = true;
+            tileFrameImportant[239] = true;
+            tileFrameImportant[240] = true;
+            tileFrameImportant[241] = true;
+            tileFrameImportant[242] = true;
+            tileFrameImportant[243] = true;
+            tileFrameImportant[244] = true;
+            tileFrameImportant[245] = true;
+            tileFrameImportant[246] = true;
+            tileFrameImportant[247] = true;
+            tileFrameImportant[254] = true;
 
             tileTable[14] = true;
             tileTable[18] = true;
@@ -1054,8 +1143,50 @@ namespace Terraria {
                     Console.WriteLine("Tiles Y: " + tilesY);
                     int tilesX = reader.ReadInt32();
                     Console.WriteLine("Tiles X: " + tilesX);
-
                     Size = new Size(tilesX, tilesY);
+
+                    if (worldVersion >= 63) {
+                        moonType = reader.ReadByte();
+                        Console.WriteLine("What is the moon type? " + moonType);
+                    }
+
+                    if (worldVersion >= 44) {
+                        treeX[0] = reader.ReadInt32();
+                        treeX[1] = reader.ReadInt32();
+                        treeX[2] = reader.ReadInt32();
+                        Console.WriteLine("What are the tree type X coords? " + treeX[0] + " " + treeX[1] + " " + treeX[2]);
+
+                        treeStyles[0] = reader.ReadInt32();
+                        treeStyles[1] = reader.ReadInt32();
+                        treeStyles[2] = reader.ReadInt32();
+                        treeStyles[3] = reader.ReadInt32();
+                        Console.WriteLine("What are the tree styles? " + treeStyles[0] + " " + treeStyles[1] + " " + treeStyles[2] + " " + treeStyles[3]);
+                    }
+
+                    if (worldVersion >= 60) {
+                        caveX[0] = reader.ReadInt32();
+                        caveX[1] = reader.ReadInt32();
+                        caveX[2] = reader.ReadInt32();
+                        Console.WriteLine("What are the cave back X coords? " + caveX[0] + " " + caveX[1] + " " + caveX[2]);
+
+                        caveBackStyles[0] = reader.ReadInt32();
+                        caveBackStyles[1] = reader.ReadInt32();
+                        caveBackStyles[2] = reader.ReadInt32();
+                        caveBackStyles[3] = reader.ReadInt32();
+                        Console.WriteLine("What are the cave back styles? " + caveBackStyles[0] + " " + caveBackStyles[1] + " " + caveBackStyles[2] + " " + caveBackStyles[3]);
+
+                        iceBackStyle = reader.ReadInt32();
+                        Console.WriteLine("What is the ice back style? " + iceBackStyle);
+                    }
+
+                    if (worldVersion >= 61) {
+                        jungleBackStyle = reader.ReadInt32();
+                        Console.WriteLine("What is the jungle back style? " + jungleBackStyle);
+
+                        hellBackStyle = reader.ReadInt32();
+                        Console.WriteLine("What is the hell back style? " + hellBackStyle);
+                    }
+
                     Spawn = new Point(reader.ReadInt32(), reader.ReadInt32());
                     Console.WriteLine("Spawn X: " + Spawn.X);
                     Console.WriteLine("Spawn Y: " + Spawn.Y);
@@ -1074,15 +1205,49 @@ namespace Terraria {
                     bool tempBloodMoon = reader.ReadBoolean();
                     Console.WriteLine("Is it a blood moon? " + tempBloodMoon);
 
+                    if (worldVersion >= 70) {
+                        bool tempEclipse = reader.ReadBoolean();
+                        Console.WriteLine("Is it an eclipse? " + tempEclipse);
+                    }
+
                     Dungeon = new Point(reader.ReadInt32(), reader.ReadInt32());
                     Console.WriteLine("Dungeon X: " + Dungeon.X);
                     Console.WriteLine("Dungeon Y: " + Dungeon.Y);
+
+                    if (worldVersion >= 56) {
+                        crimsonWorld = reader.ReadBoolean();
+                        Console.WriteLine("Crimson world? " + crimsonWorld);
+                    }
+
                     downedBoss1 = reader.ReadBoolean();
                     Console.WriteLine("Is the Eye Of Cthulu dead? " + downedBoss1);
                     downedBoss2 = reader.ReadBoolean();
                     Console.WriteLine("Is the Eater Of Worlds dead? " + downedBoss2);
                     downedBoss3 = reader.ReadBoolean();
                     Console.WriteLine("Is Skeletron dead? " + downedBoss3);
+
+                    if (worldVersion >= 66) {
+                        downedBee = reader.ReadBoolean();
+                        Console.WriteLine("Is the Queen Bee dead? " + downedBee);
+                    }
+
+                    if (worldVersion >= 44) {
+                        downedDestroyer = reader.ReadBoolean();
+                        Console.WriteLine("Is The Destroyer dead? " + downedDestroyer);
+                        downedTwins = reader.ReadBoolean();
+                        Console.WriteLine("Are The Twins dead? " + downedTwins);
+                        downedPrime = reader.ReadBoolean();
+                        Console.WriteLine("Is Skeletron Prime dead? " + downedPrime);
+                        downedHardmodeBoss = reader.ReadBoolean();
+                        Console.WriteLine("Is any hardmode boss dead? " + downedHardmodeBoss);
+                    }
+
+                    if (worldVersion >= 64) {
+                        downedPlantera = reader.ReadBoolean();
+                        Console.WriteLine("Is Plantera dead? " + downedPlantera);
+                        downedGolem = reader.ReadBoolean();
+                        Console.WriteLine("Is the Golem dead? " + downedGolem);
+                    }
 
                     if (worldVersion >= 29) {
                         savedGoblinTinkerer = reader.ReadBoolean();
@@ -1109,6 +1274,11 @@ namespace Terraria {
                         }
                     }
 
+                    if (worldVersion >= 56) {
+                        defeatedPirates = reader.ReadBoolean();
+                        Console.WriteLine("Are the pirates defeated? " + defeatedPirates);
+                    }
+
                     shadowOrbSmashed = reader.ReadBoolean();
                     Console.WriteLine("Is an orb broken? " + shadowOrbSmashed);
                     spawnMeteor = reader.ReadBoolean();
@@ -1132,6 +1302,55 @@ namespace Terraria {
                     invasionX = reader.ReadDouble();
                     Console.WriteLine("Invasion X: " + invasionX);
 
+                    if (worldVersion >= 53) {
+                        isRaining = reader.ReadBoolean();
+                        Console.WriteLine("Is raining? " + isRaining);
+                        rainTime = reader.ReadInt32();
+                        Console.WriteLine("Rain time: " + rainTime);
+                        maxRain = reader.ReadSingle();
+                        Console.WriteLine("Maximum rain: " + maxRain);
+                    }
+
+                    if (worldVersion >= 54) {
+                        tier1 = reader.ReadInt32();
+                        Console.WriteLine("What is the tier 1 ore? " + tier1);
+                        tier2 = reader.ReadInt32();
+                        Console.WriteLine("What is the tier 2 ore? " + tier2);
+                        tier3 = reader.ReadInt32();
+                        Console.WriteLine("What is the tier 3 ore? " + tier3);
+                    }
+
+                    if (worldVersion >= 55) {
+                        treeStyle = reader.ReadByte();
+                        Console.WriteLine("What is the tree style? " + treeStyle);
+                        corruptionStyle = reader.ReadByte();
+                        Console.WriteLine("What is the corruption style? " + corruptionStyle);
+                        jungleStyle = reader.ReadByte();
+                        Console.WriteLine("What is the jungle style? " + jungleStyle);
+                    }
+
+                    if (worldVersion >= 60) {
+                        snowStyle = reader.ReadByte();
+                        Console.WriteLine("What is the snow style? " + snowStyle);
+                        hallowStyle = reader.ReadByte();
+                        Console.WriteLine("What is the hallow style? " + hallowStyle);
+                        crimsonStyle = reader.ReadByte();
+                        Console.WriteLine("What is the crimson style? " + crimsonStyle);
+                        desertStyle = reader.ReadByte();
+                        Console.WriteLine("What is the desert style? " + desertStyle);
+                        oceanStyle = reader.ReadByte();
+                        Console.WriteLine("What is the ocean style? " + oceanStyle);
+                        cloudBackground = reader.ReadInt32();
+                        Console.WriteLine("What is the cloud background? " + cloudBackground);
+                    }
+
+                    if (worldVersion >= 62) {
+                        numberOfClouds = reader.ReadInt16();
+                        Console.WriteLine("Number of clouds: " + numberOfClouds);
+                        windSpeed = reader.ReadSingle();
+                        Console.WriteLine("Wind speed: " + windSpeed);
+                    }
+
                     for (int num4 = 0; num4 < MaxTilesX; num4++) {
                         for (int num6 = 0; num6 < MaxTilesY; num6++) {
                             tile[num4, num6] = new Tile();
@@ -1139,7 +1358,7 @@ namespace Terraria {
                     }
 
                     for (int i = 0; i < tilesX; i++) {
-                        float num3 = ((float)i) / ((float)tilesX);
+                        // float num3 = ((float)i) / ((float)tilesX);
 
                         short repeatTile = 0;
                         for (int n = 0; n < tilesY; n++) {
@@ -1153,11 +1372,23 @@ namespace Terraria {
                                 if (tile[i, n].Active) {
                                     tile[i, n].Type = reader.ReadByte();
                                     if (tileFrameImportant[tile[i, n].Type]) {
-                                        tile[i, n].FrameX = reader.ReadInt16();
-                                        tile[i, n].FrameY = reader.ReadInt16();
+                                        if ((worldVersion < 28 && tile[i, n].Type == 4) || (worldVersion < 40 && tile[i, n].Type == 19)) {
+                                            tile[i, n].FrameX = -1;
+                                            tile[i, n].FrameY = -1;
+                                        }
+                                        else {
+                                            tile[i, n].FrameX = reader.ReadInt16();
+                                            tile[i, n].FrameY = reader.ReadInt16();
+                                        }
                                     } else {
                                         tile[i, n].FrameX = -1;
                                         tile[i, n].FrameY = -1;
+                                    }
+                                    if (worldVersion >= 48) {
+                                        bool colorPresent = reader.ReadBoolean();
+                                        if (colorPresent) {
+                                            tile[i, n].Color = reader.ReadByte();
+                                        }
                                     }
                                 }
                                 if (worldVersion < 26) // This no longer exists after world version 25.
@@ -1166,14 +1397,42 @@ namespace Terraria {
                                 }
                                 if (reader.ReadBoolean()) {
                                     tile[i, n].Wall = reader.ReadByte();
+                                    if (worldVersion >= 48) {
+                                        bool wallColorPresent = reader.ReadBoolean();
+                                        if (wallColorPresent) {
+                                            tile[i, n].WallColor = reader.ReadByte();
+                                        }
+                                    }
                                 }
                                 if (reader.ReadBoolean()) {
                                     tile[i, n].Liquid = reader.ReadByte();
                                     tile[i, n].Lava = reader.ReadBoolean();
+                                    if (worldVersion >= 51) {
+                                        tile[i, n].Honey = reader.ReadBoolean();
+                                    }
                                 }
                                 if (worldVersion >= 33) {
                                     tile[i, n].Wire = reader.ReadBoolean();
                                 }
+
+                                if (worldVersion >= 43) {
+                                    tile[i, n].WireGreen = reader.ReadBoolean();
+                                    tile[i, n].WireBlue = reader.ReadBoolean();
+                                }
+
+                                if (worldVersion >= 41) {
+                                    tile[i, n].HalfTile = reader.ReadBoolean();
+                                }
+
+                                if (worldVersion >= 49) {
+                                    tile[i, n].TileSlope = reader.ReadByte();
+                                }
+
+                                if (worldVersion >= 42) {
+                                    tile[i, n].ActuatorPresent = reader.ReadBoolean();
+                                    tile[i, n].InActive = reader.ReadBoolean();
+                                }
+
                                 if (worldVersion >= 25) {
                                     repeatTile = reader.ReadInt16();
                                     //if (repeatTile + n > tilesY) Console.WriteLine("WARNING: Repeating " + repeatTile + " times and there's only " + (tilesY - n) + " left.");
@@ -1182,12 +1441,17 @@ namespace Terraria {
                         }
                     }
 
-                    for (int j = 0; j < 0x3e8; j++) {
+                    for (int j = 0; j < 1000; j++) {
                         if (reader.ReadBoolean()) {
                             chest[j] = new Chest();
                             chest[j].Position = new Microsoft.Xna.Framework.Vector2(reader.ReadInt32(), reader.ReadInt32());
                             for (int num6 = 0; num6 < Chest.MaxItems; num6++) {
-                                byte num7 = reader.ReadByte();
+                                byte lowByte = reader.ReadByte();
+                                short num7 = lowByte;
+                                if (worldVersion >= 59) {
+                                    byte highByte = reader.ReadByte();
+                                    num7 = (short)((highByte << 8) | lowByte);
+                                }
                                 if (num7 > 0) {
                                     chest[j].Items[num6] = new Item();
                                     if (worldVersion < 38) {
@@ -1205,9 +1469,36 @@ namespace Terraria {
                                     //Console.WriteLine("Chest contains " + chest[j].Items[num6].Count + " of " + chest[j].Items[num6].Name + ".");
                                 }
                             }
+                            if (worldVersion >= 58) {
+                                for (int num6 = 0; num6 < Chest.MaxItems; num6++) {
+                                    byte lowByte = reader.ReadByte();
+                                    short num7 = lowByte;
+                                    if (worldVersion >= 59) {
+                                        byte highByte = reader.ReadByte();
+                                        num7 = (short)((highByte << 8) | lowByte);
+                                    }
+                                    if (num7 > 0) {
+                                        chest[j].ItemsMore[num6] = new Item();
+                                        if (worldVersion < 38) {
+                                            string itemName = reader.ReadString();
+                                            chest[j].ItemsMore[num6].Name = itemName;
+                                        }
+                                        else {
+                                            int itemID = reader.ReadInt32();
+                                            chest[j].ItemsMore[num6].Name = itemID.ToString(); // This belongs in a new field.
+                                        }
+                                        if (worldVersion >= 36) {
+                                            byte itemPrefixID = reader.ReadByte();
+                                            // Do we need to save this?
+                                        }
+                                        chest[j].ItemsMore[num6].Count = num7;
+                                        //Console.WriteLine("Chest contains " + chest[j].Items[num6].Count + " of " + chest[j].Items[num6].Name + ".");
+                                    }
+                                }
+                            }
                         }
                     }
-                    for (int k = 0; k < 0x3e8; k++) {
+                    for (int k = 0; k < 1000; k++) {
                         if (reader.ReadBoolean()) {
                             string str2 = reader.ReadString();
                             int num9 = reader.ReadInt32();
@@ -1240,8 +1531,18 @@ namespace Terraria {
                         String demolitionistName = reader.ReadString();
                         String goblinTinkererName = reader.ReadString();
                         String wizardName = reader.ReadString();
-                        if (worldVersion >= 35) {
+                        if (worldVersion >= 34) {
                             String mechanicName = reader.ReadString();
+                        }
+                        if (worldVersion >= 65) {
+                            String truffleName = reader.ReadString();
+                            String steampunkerName = reader.ReadString();
+                            String dyeTraderName = reader.ReadString();
+                            String partyGirlName = reader.ReadString();
+                            String cyborgName = reader.ReadString();
+                            String painterName = reader.ReadString();
+                            String witchDoctorName = reader.ReadString();
+                            String pirateName = reader.ReadString();
                         }
                     }
 
@@ -5502,8 +5803,8 @@ namespace Terraria {
                 bool flag = false;
                 int num = i;
                 int num2 = j;
-                num += (tile[i, j].FrameX / 18) * -1;
-                num2 += (tile[i, j].FrameY / 18) * -1;
+                num += (tile[i, j].FrameX / 18) % 3 * -1;
+                num2 += (tile[i, j].FrameY / 18) % 2 * -1;
                 for (int k = num; k < (num + 3); k++) {
                     for (int m = num2; m < (num2 + 2); m++) {
                         if (tile[k, m] == null) {
@@ -5544,8 +5845,8 @@ namespace Terraria {
                 bool flag = false;
                 int num = i;
                 int num2 = j;
-                num += (tile[i, j].FrameX / 18) * -1;
-                num2 += (tile[i, j].FrameY / 18) * -1;
+                num += (tile[i, j].FrameX / 18) % 3 * -1;
+                num2 += (tile[i, j].FrameY / 18) % 3 * -1;
                 for (int k = num; k < (num + 3); k++) {
                     for (int m = num2; m < (num2 + 3); m++) {
                         if (tile[k, m] == null) {
@@ -5586,16 +5887,16 @@ namespace Terraria {
                 bool flag = false;
                 int num = i;
                 int num2 = j;
-                num += (tile[i, j].FrameX / 18) * -1;
+                num += (tile[i, j].FrameX / 18) % 4 * -1;
                 if ((type == 0x4f) && (tile[i, j].FrameX >= 72)) {
-                    num += 4;
+                    // num += 4;
                 }
-                num2 += (tile[i, j].FrameY / 18) * -1;
+                num2 += (tile[i, j].FrameY / 18) % 2 * -1;
                 for (int k = num; k < (num + 4); k++) {
                     for (int m = num2; m < (num2 + 2); m++) {
                         int num5 = (k - num) * 18;
                         if ((type == 0x4f) && (tile[i, j].FrameX >= 72)) {
-                            num5 = ((k - num) + 4) * 18;
+                            // num5 = ((k - num) + 4) * 18;
                         }
                         if (tile[k, m] == null) {
                             tile[k, m] = new Tile();
@@ -5635,8 +5936,11 @@ namespace Terraria {
                 bool flag = false;
                 int num = i;
                 int num2 = j;
-                num += (tile[i, j].FrameX / 18) * -1;
-                num2 += (tile[i, j].FrameY / 18) * -1;
+                num += (tile[i, j].FrameX / 18) % 2 * -1;
+                num2 += (tile[i, j].FrameY / 18) % 2 * -1;
+                Console.WriteLine("Tile: " + i + ", " + j);
+                Console.WriteLine("Frame: " + tile[i, j].FrameX + ", " + tile[i, j].FrameY);
+                Console.WriteLine("Nums: " + num + ", " + num2);
                 for (int k = num; k < (num + 2); k++) {
                     for (int m = num2; m < (num2 + 2); m++) {
                         if (tile[k, m] == null) {
@@ -5655,13 +5959,13 @@ namespace Terraria {
                 }
                 if (flag) {
                     destroyObject = true;
-                    for (int n = num; n < (num + 2); n++) {
+                    /*for (int n = num; n < (num + 2); n++) {
                         for (int num6 = num2; num6 < (num2 + 3); num6++) {
                             if ((tile[n, num6].Type == type) && tile[n, num6].Active) {
                                 KillTile(n, num6, false, false, false);
                             }
                         }
-                    }
+                    }*/
                     destroyObject = false;
                 }
             }

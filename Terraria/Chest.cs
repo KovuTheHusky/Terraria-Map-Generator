@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +16,7 @@ namespace Terraria {
         #region Members
 
         public Item[] Items = new Item[MaxItems];
+        public Item[] ItemsMore = new Item[MaxItems];
         public Vector2 Position;
 
         #endregion

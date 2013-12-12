@@ -106,7 +106,7 @@ namespace TerrariaMapTool {
                 }
             }
 
-            for (int i = 1; i < 32; i++) {
+            for (int i = 1; i < 116; i++) {
                 textures.wallTexture[i] = ConvertTextureToImage(content.Load<Texture2D>(@"Images\Wall_" + i));
 
                 if (exportTexturesToFiles) {
@@ -1005,7 +1005,7 @@ namespace TerrariaMapTool {
             string terrariaJsPath = Path.Combine(options.OutputDirectory, "terraria.js");
             string utilJsPath = Path.Combine(options.OutputDirectory, "util.js");
 
-            File.WriteAllText(terrariaJsPath, Properties.Resources.Terraria.Replace("var origin = translateGameXYToLatLng(0, 600);", "var origin = translateGameXYToLatLng(" + world.Spawn.X + ", 600);"));
+            File.WriteAllText(terrariaJsPath, Properties.Resources.Terraria.Replace("var origin = translateGameXYToLatLng(0, 600);", "var origin = translateGameXYToLatLng(" + world.Spawn.X + ", " + world.Spawn.Y + ");"));
             File.WriteAllText(utilJsPath, Properties.Resources.Utilities);
         }
 
@@ -1088,7 +1088,7 @@ namespace TerrariaMapTool {
             public Image[] cloudTexture = new Image[4];
             public Image[] liquidTexture = new Image[2];
             public Image[] tileTexture = new Image[World.NumTiles];
-            public Image[] wallTexture = new Image[32];
+            public Image[] wallTexture = new Image[116];
             public Image[] npcTexture = new Image[147];
             public Image[] treeBranchTexture = new Image[5];
             public Image[] treeTopTexture = new Image[5];
